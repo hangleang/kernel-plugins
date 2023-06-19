@@ -6,3 +6,6 @@
   branch = "release-v0"
   path = "lib/prb-test"
   url = "https://github.com/PaulRBerg/prb-test"
+[submodule "lib/kernel"]
+	path = lib/kernel
+	url = https://github.com/zerodevapp/kernel
