@@ -20,7 +20,7 @@ contract TwoECDSAValidator is IKernelValidator {
     uint256 private constant OWNER_TWO_OFFSET = 20;
     uint256 private constant OWNER_TWO_ENDPOS = 40;
 
-    mapping(address => TwoECDSAValidatorStorage) public ecdsaValidatorStorage;
+    mapping(address account => TwoECDSAValidatorStorage accountStorage) public ecdsaValidatorStorage;
 
     function enable(bytes calldata _data) external override {
         address ownerOne = address(bytes20(_data[OWNER_ONE_OFFSET:OWNER_TWO_OFFSET]));
