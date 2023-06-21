@@ -1,12 +1,12 @@
-// // SPDX-License-Identifier: MIT
-// pragma solidity >=0.8.19;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.19;
 
 // import { KernelFactory, EIP1967Proxy, IKernelValidator } from "kernel/factory/KernelFactory.sol";
 // import { IEntryPoint } from "account-abstraction/interfaces/IEntryPoint.sol";
 
 // import { TwoECDSAValidator } from "../validator/TwoECDSAValidator.sol";
 
-// contract TwoECDSAKernelFactory {
+contract TwoECDSAKernelFactory {
 //     KernelFactory public immutable singletonFactory;
 //     TwoECDSAValidator public immutable validator;
 //     IEntryPoint public immutable entryPoint;
@@ -33,4 +33,4 @@
 //         bytes memory data = abi.encodePacked(_ownerOne, _ownerTwo);
 //         return singletonFactory.getAccountAddress(validator, data, _index);
 //     }
-// }
+}
