@@ -10,6 +10,15 @@ abstract contract BaseScript is Script {
     /// @dev Needed for the deterministic deployments.
     bytes32 internal constant ZERO_SALT = bytes32(0);
 
+    /// @dev The address of the deterministic create2 factory.
+    address internal constant DETERMINISTIC_CREATE2_FACTORY = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
+
+    /// @dev The address of the entrypoint contract.
+    address internal constant ENTRYPOINT = 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789;
+
+    /// @dev The address of the kernel factory.
+    address internal constant KERNEL_FACTORY = 0x5D006d3880645ec6e254E18C1F879DAC9Dd71A39;
+
     /// @dev The address of the contract deployer.
     address internal deployer;
 

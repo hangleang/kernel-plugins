@@ -9,6 +9,3 @@
 [submodule "lib/kernel"]
 	path = lib/kernel
 	url = https://github.com/zerodevapp/kernel
-[submodule "lib/solidity-jwt"]
-	path = lib/solidity-jwt
-	url = https://github.com/OpenZeppelin/solidity-jwt
