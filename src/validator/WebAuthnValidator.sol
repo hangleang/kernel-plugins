@@ -1,6 +1,6 @@
 // from: https://github.com/eth-infinitism/trampoline/blob/webauthn/contracts/WebauthnAccount.sol
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.8.15;
+pragma solidity >=0.8.19;
 
 import { IKernelValidator, UserOperation } from "kernel/validator/IValidator.sol";
 import { SIG_VALIDATION_FAILED } from "kernel/utils/KernelHelper.sol";
