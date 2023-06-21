@@ -79,13 +79,13 @@ contract WebAuthnValidator is IKernelValidator {
         returns (uint256)
     {
         require(webAuthnValidatorEnabled[sender], "WebAuthn: disabled");
+        WebAuthnAccountStorage memory _accountStorage = webAuthnValidatorStorage[sender];
         (
             bytes memory signature,
             bytes memory clientDataJSON //, bytes memory authenticatorDataBytes
         ) = abi.decode(signatureWithData, (bytes, bytes));
 
         (uint256 r, uint256 s) = this._getRSValues(signature);
-        WebAuthnAccountStorage memory _accountStorage = webAuthnValidatorStorage[sender];
 
         string memory requestIdHex = BytesData.toHex(requestId);
 

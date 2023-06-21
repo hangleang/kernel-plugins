@@ -11,7 +11,7 @@ abstract contract BaseScript is Script {
     bytes32 internal constant ZERO_SALT = bytes32(0);
 
     /// @dev The address of the deterministic create2 factory.
-    address internal constant DETERMINISTIC_CREATE2_FACTORY = 0x4e59b44847b379578588920cA78FbF26c0B4956C;
+    address internal constant DETERMINISTIC_CREATE2_FACTORY = 0x7A0D94F55792C434d74a40883C6ed8545E406D12;
 
     /// @dev The address of the entrypoint contract.
     address internal constant ENTRYPOINT = 0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789;

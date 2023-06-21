@@ -69,17 +69,23 @@ contract TwoECDSAValidator is IKernelValidator {
         view
         returns (uint256)
     {
-        bytes32 ethHash = hash.toEthSignedMessageHash();
-
+        TwoECDSAValidatorStorage memory owners = ecdsaValidatorStorage[sender];
         (bytes memory signatureOne, bytes memory signatureTwo) = abi.decode(signature, (bytes, bytes));
 
-        address recoveryOne = ethHash.recover(signatureOne);
-        address recoveryTwo = ethHash.recover(signatureTwo);
-
-        TwoECDSAValidatorStorage memory owners = ecdsaValidatorStorage[sender];
+        address recoveryOne = hash.recover(signatureOne);
+        address recoveryTwo = hash.recover(signatureTwo);
 
         bool ownerOneCheck = owners.ownerOne == recoveryOne;
         bool ownerTwoCheck = owners.ownerTwo == recoveryTwo;
+
+        if (ownerOneCheck && ownerTwoCheck) return 0;
+
+        bytes32 ethHash = hash.toEthSignedMessageHash();
+        recoveryOne = ethHash.recover(signatureOne);
+        recoveryTwo = ethHash.recover(signatureTwo);
+
+        ownerOneCheck = owners.ownerOne == recoveryOne;
+        ownerTwoCheck = owners.ownerTwo == recoveryTwo;
 
         if (ownerOneCheck && ownerTwoCheck) return 0;
 
