@@ -24,6 +24,11 @@ struct SpendingLimitState {
     uint256 eodTimestamp; // end of day
 }
 
+/**
+ * @title SpendingLimitValidator
+ * @author hangleang
+ * @notice Not for production, just PoC
+ */
 contract SpendingLimitValidator is IKernelValidator {
     event ThresholdValueChanged(address indexed kernel, address indexed token, uint256 value);
 

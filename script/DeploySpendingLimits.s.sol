@@ -8,7 +8,7 @@ import { TokenSpendingLimitActions } from "../src/executor/TokenSpendingLimitAct
 import { SpendingLimitValidator } from "../src/validator/SpendingLimitValidator.sol";
 
 /// @dev See the Solidity Scripting tutorial: https://book.getfoundry.sh/tutorials/solidity-scripting
-contract DeployTwoECDSAValidator is BaseScript {
+contract DeploySpendingLimits is BaseScript {
     function run() public broadcaster {
         TokenSpendingLimitActions action = new TokenSpendingLimitActions();
 
