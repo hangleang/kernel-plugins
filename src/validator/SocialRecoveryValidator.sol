@@ -16,11 +16,6 @@ struct SocialRecoveryValidatorStorage {
     address potentialOwner;
 }
 
-struct GuardianApprovalStorage {
-    bool isGuardian;
-    bool isApproved;
-}
-
 /**
  * @title SocialRecoveryValidator
  * @author hangleang
@@ -37,8 +32,9 @@ contract SocialRecoveryValidator is IKernelValidator {
 
     mapping(address kernel => SocialRecoveryValidatorStorage validatorStorage) public socialRecoveryValidatorStorage;
 
-    mapping(address guardian => mapping(address kernel => GuardianApprovalStorage approvalStorage)) public
-        quardianApprovalStorage;
+    mapping(address kernel => BitMaps.BitMap bitmap) private approvals;
+
+    mapping(address guardian => mapping(address kernel => bool isTrue)) public isGuardian;
 
     function enable(bytes calldata _data) external override {
         address kernel = msg.sender;
@@ -55,7 +51,7 @@ contract SocialRecoveryValidator is IKernelValidator {
         socialRecoveryValidatorStorage[kernel] = validatorStorage;
 
         for (uint256 i = 0; i < guardians.length; i++) {
-            quardianApprovalStorage[guardians[i]][kernel].isGuardian = true;
+            isGuardian[guardians[i]][kernel] = true;
             emit GuardianAdded(kernel, guardians[i]);
         }
 
@@ -65,7 +61,7 @@ contract SocialRecoveryValidator is IKernelValidator {
     function disable(bytes calldata _data) external override {
         address[] memory quardians = abi.decode(_data, (address[]));
         for (uint256 i = 0; i < quardians.length; i++) {
-            quardianApprovalStorage[quardians[i]][msg.sender].isGuardian = false;
+            isGuardian[quardians[i]][msg.sender] = false;
             emit GuardianRemoved(msg.sender, quardians[i]);
         }
     }
@@ -90,12 +86,15 @@ contract SocialRecoveryValidator is IKernelValidator {
             require(pausedUntil > validatorStorage.pausedUntil, "SocialRecoveryValidator: invalid pausedUntil");
             address newOwner = address(bytes20(userOp.signature[6:26]));
             bytes calldata signature = userOp.signature[26:91];
+
+            // check signer & approvals
             address recovered = ECDSA.recover(userOpHash, signature);
-            if (!quardianApprovalStorage[recovered][userOp.sender].isGuardian) return SIG_VALIDATION_FAILED;
+            if (!isGuardian[recovered][userOp.sender]) return SIG_VALIDATION_FAILED;
+            uint256 signerIndex = uint256(uint160(recovered));
+            require(!approvals[userOp.sender].get(signerIndex), "MultisigAuthorizationValidator: already approved");
 
             // check if potentialOwner is empty or same with existing one, not yet approved
             require(validatorStorage.potentialOwner == address(0) || validatorStorage.potentialOwner == newOwner);
-            require(!quardianApprovalStorage[recovered][userOp.sender].isApproved);
 
             // update approvalCount, potentialOwner, isApproved
             validatorStorage.approvalCount = validatorStorage.approvalCount + 1;
@@ -108,9 +107,12 @@ contract SocialRecoveryValidator is IKernelValidator {
                 validatorStorage.potentialOwner = address(0);
 
                 // reset approvals states
+                delete approvals[userOp.sender];
             } else {
                 validatorStorage.potentialOwner = newOwner;
                 quardianApprovalStorage[recovered][userOp.sender].isApproved = true;
+
+                // TODO: should prevent from execution before hit threshold signatures
             }
 
             socialRecoveryValidatorStorage[userOp.sender] = validatorStorage;
