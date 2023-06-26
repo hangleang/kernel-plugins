@@ -4,6 +4,8 @@ pragma solidity >=0.8.19;
 import "kernel/validator/IValidator.sol";
 import "account-abstraction/core/Helpers.sol";
 import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
+import "@openzeppelin/contracts/utils/structs/BitMaps.sol";
+
 import { SIG_VALIDATION_FAILED } from "kernel/utils/KernelHelper.sol";
 import { KernelStorage } from "kernel/abstract/KernelStorage.sol";
 
@@ -25,6 +27,8 @@ struct SocialRecoveryValidatorStorage {
  * - https://github.com/zerodevapp/kernel/blob/main/src/validator/MultiECDSAValidator.sol
  */
 contract SocialRecoveryValidator is IKernelValidator {
+    using BitMaps for BitMaps.BitMap;
+
     event GuardianAdded(address indexed kernel, address indexed guardian);
     event GuardianRemoved(address indexed kernel, address indexed guardian);
     event SocialRecoveryValidatorStorageChanges(address indexed kernel, address indexed owner, uint8 threshold);
@@ -110,7 +114,7 @@ contract SocialRecoveryValidator is IKernelValidator {
                 delete approvals[userOp.sender];
             } else {
                 validatorStorage.potentialOwner = newOwner;
-                quardianApprovalStorage[recovered][userOp.sender].isApproved = true;
+                approvals[userOp.sender].setTo(signerIndex, true);
 
                 // TODO: should prevent from execution before hit threshold signatures
             }
