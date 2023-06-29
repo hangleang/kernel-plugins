@@ -19,10 +19,6 @@ contract WebAuthnValidator is IKernelValidator {
     event WebAuthnChanges(address indexed kernel, address indexed ec, uint256[2] q, bytes authDataBuffer);
     event WebAuthnEnabled(address indexed kernel, bool indexed enabled);
 
-    // uint256 private constant EC_OFFSET = 0;
-    // uint256 private constant OWNER_TWO_OFFSET = 20;
-    // uint256 private constant OWNER_TWO_ENDPOS = 40;
-
     mapping(address => WebAuthnAccountStorage) public webAuthnValidatorStorage;
     mapping(address => bool) public webAuthnValidatorEnabled;
 
